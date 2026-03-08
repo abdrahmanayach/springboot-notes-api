@@ -2,7 +2,9 @@ package com.example.notesapi.service;
 
 import com.example.notesapi.model.Note;
 import com.example.notesapi.repository.NoteRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -26,12 +28,12 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public Note getNoteById(Long id) {
-        return noteRepository.findById(id).orElseThrow(() -> new RuntimeException("Note not found"));
+        return noteRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Note with id " + id + " not found"));
     }
 
     @Override
     public Note updateNote(Long id, Note note) {
-        Note n = noteRepository.findById(id).orElseThrow(() -> new RuntimeException("Note not found"));
+        Note n = noteRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Note with id " + id + " not found"));
         n.setTitle(note.getTitle());
         n.setContent(note.getContent());
         return noteRepository.save(n);
@@ -40,7 +42,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public void deleteNoteById(Long id) {
         if(!noteRepository.existsById(id)) {
-            throw new RuntimeException("Note not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Note with id " + id + " not found");
         }
         noteRepository.deleteById(id);
     }

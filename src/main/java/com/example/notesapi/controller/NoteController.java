@@ -2,6 +2,7 @@ package com.example.notesapi.controller;
 
 import com.example.notesapi.model.Note;
 import com.example.notesapi.service.NoteService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class NoteController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Note createNote(@RequestBody Note note) {
         return noteService.createNote(note);
     }
@@ -36,6 +38,7 @@ public class NoteController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteNoteById(@PathVariable Long id) {
         noteService.deleteNoteById(id);
     }
